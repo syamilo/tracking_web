@@ -28,11 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // Redirect to the appropriate page based on role
                 if ($user['role'] == 'admin') {
-                    header("Location: admin.php");
+                    header("Location: /fyp/tracking_web/admin.php");
                 } else {
-                    header("Location: staff.php");
+                    header("Location:  /fyp/tracking_web/staff.php");
                 }
                 exit();
+                
             } else {
                 // Invalid password
                 $error = "Invalid username, password, or role! <a href='javascript:void(0);' onclick='showForgotPasswordForm();'>Forgot Password?</a>";
