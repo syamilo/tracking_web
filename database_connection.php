@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";  // your database username
-$password = "y";  // your database password
+$password = "Milo123_";  // your database password
 $dbname = "tracking_system";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
