@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     header("Location:  /fyp/tracking_web/staff.php");
                 }
                 exit();
+                
             } else {
                 // Invalid password
                 $error = "Invalid username, password, or role! <a href='javascript:void(0);' onclick='showForgotPasswordForm();'>Forgot Password?</a>";
