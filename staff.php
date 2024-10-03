@@ -1,7 +1,7 @@
 <?php
 session_start();
 if ($_SESSION['role'] != 'staff') {
-    header("Location: login.php");
+    header("Location: /fyp/tracking_web/login.php");
     exit();
 }
 ?>
