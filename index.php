@@ -30,7 +30,7 @@ $uri .= $_SERVER['HTTP_HOST'];
         </p>
         
         <!-- Hyperlink to Login Page -->
-        <a href="<?php echo $uri; ?>/login.php">Proceed to Login</a>
+        <a href="/login.php">Proceed to Login</a>
     </div>
 </body>
 </html>
