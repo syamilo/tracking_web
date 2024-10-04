@@ -12,7 +12,7 @@ $client->setAuthConfig('path/to/your/json/keyfile.json');
 $service = new Sheets($client);
 
 // ID of the Google Sheet
-$spreadsheetId = 'your-spreadsheet-id';
+$spreadsheetId = '18yV_aXpSoPeabsMQR3GiMRBuJj5eGt7sxM-VOShyD2Q/edit?resourcekey=&gid=500428367#gid=500428367';
 $range = 'Sheet1!A1:C'; // Adjust the range as needed
 
 // Fetch data from Google Sheets
