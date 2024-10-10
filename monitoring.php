@@ -9,8 +9,8 @@ if ($_SESSION['role'] != 'staff') {
 // Get today's date
 $today = date('Y-m-d');
 
-// Query for fetching only today's customers
-$query = "SELECT * FROM customer WHERE booking_date = '$today'";
+// Query for fetching only today's active customers
+$query = "SELECT * FROM customer WHERE booking_date = '$today' AND status = 'present'";
 $result = $conn->query($query);
 
 // Handle setting activity duration and save it to session
@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Retrieve the duration from session if set
 $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
-
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +29,7 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Tracking</title>
     <link rel="stylesheet" href="monitoring.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAILXH4lFnWUq_LdSdDoD5UgSrFBiNIwEE&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 </head>
 <body>
     <div class="container">
@@ -71,12 +70,12 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
             <button type="submit">Set Duration</button>
         </form>
 
-        <!-- Countdown timer (hidden until duration is set) -->
+        <!-- Countdown timer -->
         <div id="countdown-container" style="display:none;">
             <h3>Time Remaining: <span id="countdown"></span></h3>
         </div>
 
-        <!-- Back Button (now placed under the form) -->
+        <!-- Back Button -->
         <a href="staff.php" class="back-button">Back to Dashboard</a>
 
     </div>
@@ -88,6 +87,24 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
                 zoom: 10,
                 center: {lat: -34.397, lng: 150.644} // Default center, can be changed based on data
             });
+
+            // For testing, use laptop's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    var marker = new google.maps.Marker({
+                        position: pos,
+                        map: map,
+                        title: 'Your Location'
+                    });
+                    map.setCenter(pos);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
 
             <?php
             // Loop through customer data to create map markers
