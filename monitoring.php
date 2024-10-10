@@ -9,8 +9,8 @@ if ($_SESSION['role'] != 'staff') {
 // Get today's date
 $today = date('Y-m-d');
 
-// Query for fetching only today's active customers
-$query = "SELECT * FROM customer WHERE booking_date = '$today' AND status = 'present'";
+// Query for fetching only today's customers who attended
+$query = "SELECT * FROM customer WHERE booking_date = '$today' AND attendance_status = 1";
 $result = $conn->query($query);
 
 // Handle setting activity duration and save it to session
@@ -70,18 +70,17 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
             <button type="submit">Set Duration</button>
         </form>
 
-        <!-- Countdown timer -->
+        <!-- Countdown timer (hidden until duration is set) -->
         <div id="countdown-container" style="display:none;">
             <h3>Time Remaining: <span id="countdown"></span></h3>
         </div>
 
-        <!-- Back Button -->
+        <!-- Back Button (now placed under the form) -->
         <a href="staff.php" class="back-button">Back to Dashboard</a>
 
     </div>
 
-    <script
-
+    <script>
         // Initialize the map
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -89,7 +88,6 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
                 center: {lat: -34.397, lng: 150.644} // Default center, can be changed based on data
             });
 
-            // Replace this part with actual GPS tracker data
             <?php
             // Loop through customer data to create map markers
             $result->data_seek(0); // Reset result pointer
