@@ -1,5 +1,5 @@
 /* Basic Reset */
-body, h2, table, th, td, a {
+body, h2, table, th, td, a, button {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -8,15 +8,15 @@ body, h2, table, th, td, a {
 /* Body Styling */
 body {
     font-family: Arial, sans-serif;
-    background: url('blue_background.jpg') no-repeat center center fixed; /* Background Image */
-    background-size: cover; /* Ensures the image covers the entire screen */
+    background: url('blue_background.jpg') no-repeat center center fixed;
+    background-size: cover;
     margin: 0;
     padding: 0;
 }
 
 /* Container Styling */
 .container {
-    background: rgba(255, 255, 255, 0.9); /* Semi-transparent for better readability */
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -41,7 +41,7 @@ table {
 }
 
 thead {
-    background-color: #007bff;
+    background-color: #007bff; /* Blue header */
     color: #fff;
 }
 
@@ -60,8 +60,51 @@ td {
     color: #555;
 }
 
+/* Even row styling */
 tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+/* Attendance Status Styling */
+tr.present {
+    background-color: #d4edda; /* Light green for present */
+    color: #155724; /* Dark green text */
+}
+
+tr.absent {
+    background-color: #f8d7da; /* Light red for absent */
+    color: #721c24; /* Dark red text */
+}
+
+/* Disable button styling */
+button:disabled {
+    background-color: #cccccc; /* Light gray background */
+    color: #666666; /* Gray text */
+    cursor: not-allowed;
+}
+
+/* Button Container Styling */
+.button-container {
+    display: flex;
+    justify-content: flex-start; /* Align buttons to the left */
+    margin-bottom: 20px;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 /* Back Button Styling */
