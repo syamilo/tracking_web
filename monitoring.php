@@ -9,8 +9,8 @@ if ($_SESSION['role'] != 'staff') {
 // Get today's date
 $today = date('Y-m-d');
 
-// Query for fetching only today's customers who attended
-$query = "SELECT * FROM customer WHERE booking_date = '$today' AND attendance_status = 1";
+// Query for fetching only today's customers
+$query = "SELECT * FROM customer WHERE booking_date = '$today'";
 $result = $conn->query($query);
 
 // Handle setting activity duration and save it to session
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Retrieve the duration from session if set
 $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
+
 ?>
 
 <!DOCTYPE html>
