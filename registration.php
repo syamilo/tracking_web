@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Insert into customer table
     $customer_query = "INSERT INTO customer (name, age, ic_number, address, phone_number, booking_date, colour, activity, attended) 
                        VALUES ('$name', '$age', '$ic_number', '$address', '$phone_number', '$booking_date', '$color', '$activity', '$attended')";
-
+    
     if ($conn->query($customer_query)) {
         // Check if an activity record already exists for this booking date
         $check_activity_query = "SELECT * FROM activity_record WHERE date = '$booking_date'";
@@ -54,59 +54,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Registration</title>
-    <link rel="stylesheet" href="registration.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="registration.css">
 </head>
 <body>
-    <div class="main-container">
-        <div class="form-left">
-            <h2>Register Customer</h2>
+    <div class="form-container">
+        <h2>Register Customer</h2>
 
-            <!-- Show success message if registration is successful -->
-            <?php if (!empty($success_message)): ?>
-                <p class='success-message'><?php echo $success_message; ?></p>
-            <?php endif; ?>
+        <!-- Show success message if registration is successful -->
+        <?php if (!empty($success_message)): ?>
+            <p class='success-message'><?php echo $success_message; ?></p>
+        <?php endif; ?>
 
-            <form method="post" action="registration.php">
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" name="name" id="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age *</label>
-                    <input type="number" name="age" id="age" required>
-                </div>
-                <div class="form-group">
-                    <label for="ic_number">IC Number *</label>
-                    <input type="text" name="ic_number" id="ic_number" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Address *</label>
-                    <input type="text" name="address" id="address" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone_number">Phone Number *</label>
-                    <input type="text" name="phone_number" id="phone_number" required>
-                </div>
-                <div class="form-group">
-                    <label for="booking_date">Booking Date *</label>
-                    <input type="date" name="booking_date" id="booking_date" required>
-                </div>
-                <div class="form-group">
-                    <label for="color">Choose a Color *</label>
-                    <select name="color" id="color" required>
-                        <option value="red">Red</option>
-                        <option value="blue">Blue</option>
-                        <option value="green">Green</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="activity">Activity *</label>
-                    <input type="text" name="activity" id="activity" required>
-                </div>
-                <button type="submit" class="submit-button">Register</button>
-            </form>
-            <a href="staff.php" class="back-button">Back to Dashboard</a>
-        </div>
+        <form method="post" action="registration.php">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age *</label>
+                <input type="number" name="age" id="age" required>
+            </div>
+            <div class="form-group">
+                <label for="ic_number">IC Number *</label>
+                <input type="text" name="ic_number" id="ic_number" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address *</label>
+                <input type="text" name="address" id="address" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Phone Number *</label>
+                <input type="text" name="phone_number" id="phone_number" required>
+            </div>
+            <div class="form-group">
+                <label for="booking_date">Booking Date *</label>
+                <input type="date" name="booking_date" id="booking_date" required>
+            </div>
+            <div class="form-group">
+                <label for="color">Choose a Color *</label>
+                <select name="color" id="color" required>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="activity">Activity *</label>
+                <select name="activity" id="activity" required>
+                    <option value="Hiking">Hiking</option>
+                    <option value="Jungle Tracking">Jungle Tracking</option>
+                    <option value="Caving">Caving</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-button">Register</button>
+        </form>
+        <a href="staff.php" class="back-button">Back to Dashboard</a>
     </div>
 </body>
 </html>
