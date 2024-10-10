@@ -80,7 +80,8 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
 
     </div>
 
-    <script>
+    <script
+
         // Initialize the map
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -88,24 +89,7 @@ $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
                 center: {lat: -34.397, lng: 150.644} // Default center, can be changed based on data
             });
 
-            // For testing, use laptop's current location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    var marker = new google.maps.Marker({
-                        position: pos,
-                        map: map,
-                        title: 'Your Location'
-                    });
-                    map.setCenter(pos);
-                });
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-
+            // Replace this part with actual GPS tracker data
             <?php
             // Loop through customer data to create map markers
             $result->data_seek(0); // Reset result pointer
