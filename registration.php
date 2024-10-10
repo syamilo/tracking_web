@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $booking_date = $_POST['booking_date'];
     $color = $_POST['color'];
     $activity = $_POST['activity'];
-    $attended = 0; // Assuming default value for attended is 0 (not attended)
+    $attended = 0; // Default value for attended is 0 (not attended)
 
     // Insert into customer table
     $customer_query = "INSERT INTO customer (name, age, ic_number, address, phone_number, booking_date, colour, activity, attended) 
@@ -100,7 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group">
                 <label for="activity">Activity</label>
-                <input type="text" name="activity" id="activity" required>
+                <select name="activity" id="activity" required>
+                    <option value="hiking">Hiking</option>
+                    <option value="jungle tracking">Jungle Tracking</option>
+                    <option value="caving">Caving</option>
+                </select>
             </div>
             <button type="submit" class="submit-button">Register</button>
         </form>
