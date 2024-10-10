@@ -54,14 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Registration</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="registration.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <div class="main-container">
         <div class="form-left">
             <h2>Welcome</h2>
             <p>You are 30 seconds away from starting your adventure!</p>
-            <a href="login.php" class="btn-login">Login</a>
         </div>
 
         <div class="form-right">

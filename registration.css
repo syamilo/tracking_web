@@ -8,7 +8,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0; /* Change to a background image if desired */
-    background-image: url('path_to_your_background_image.jpg'); /* Add your image path here */
+    background-image: url('blue_background.jpg'); /* Add your image path here */
     background-size: cover; /* Cover the entire background */
     display: flex;
     justify-content: center;
