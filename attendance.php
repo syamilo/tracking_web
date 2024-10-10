@@ -32,16 +32,66 @@ if (!empty($search_ic)) {
 
 $result = $conn->query($query);
 
+// Load attendance data from the 'attendance' table for today
+$attendance_query = "SELECT customer_id, status FROM attendance WHERE attendance_date='$today'";
+$attendance_result = $conn->query($attendance_query);
+
+// Initialize an array to store the ticked customers (present)
+$ticked_customers = [];
+while ($row = $attendance_result->fetch_assoc()) {
+    if ($row['status'] == 'present') {
+        $ticked_customers[] = $row['customer_id'];
+    }
+}
+
 // Handle attendance confirmation
-$attendance_confirmed = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['attendance'])) {
         $_SESSION['ticked_customers'] = $_POST['attendance'];
         $attended_ids = $_SESSION['ticked_customers'];
 
-        // Delete customers who were not ticked (absent)
-        $delete_query = "DELETE FROM customer WHERE booking_date='$today' AND id NOT IN (" . implode(',', array_map('intval', $attended_ids)) . ")";
-        $conn->query($delete_query);
+        // Insert or update attendance records in the 'attendance' table
+        foreach ($attended_ids as $customer_id) {
+            // Check if the record already exists
+            $check_query = "SELECT id FROM attendance WHERE customer_id='$customer_id' AND attendance_date='$today'";
+            $check_result = $conn->query($check_query);
+
+            if ($check_result->num_rows > 0) {
+                // Update the existing record to 'present'
+                $update_query = $conn->prepare("UPDATE attendance SET status='present' WHERE customer_id=? AND attendance_date=?");
+                $update_query->bind_param("is", $customer_id, $today);
+                $update_query->execute();
+            } else {
+                // Insert a new record as 'present'
+                $insert_query = $conn->prepare("INSERT INTO attendance (customer_id, attendance_date, status) VALUES (?, ?, 'present')");
+                $insert_query->bind_param("is", $customer_id, $today);
+                $insert_query->execute();
+            }
+        }
+
+        // Insert or update records for absent customers
+        $absent_query = "SELECT id FROM customer WHERE booking_date='$today' AND id NOT IN (" . implode(',', array_map('intval', $attended_ids)) . ")";
+        $absent_result = $conn->query($absent_query);
+
+        while ($row = $absent_result->fetch_assoc()) {
+            $absent_customer_id = $row['id'];
+
+            // Check if the record already exists
+            $check_absent_query = "SELECT id FROM attendance WHERE customer_id='$absent_customer_id' AND attendance_date='$today'";
+            $check_absent_result = $conn->query($check_absent_query);
+
+            if ($check_absent_result->num_rows > 0) {
+                // Update the existing record to 'absent'
+                $update_absent_query = $conn->prepare("UPDATE attendance SET status='absent' WHERE customer_id=? AND attendance_date=?");
+                $update_absent_query->bind_param("is", $absent_customer_id, $today);
+                $update_absent_query->execute();
+            } else {
+                // Insert a new record as 'absent'
+                $insert_absent_query = $conn->prepare("INSERT INTO attendance (customer_id, attendance_date, status) VALUES (?, ?, 'absent')");
+                $insert_absent_query->bind_param("is", $absent_customer_id, $today);
+                $insert_absent_query->execute();
+            }
+        }
 
         // Calculate the total number of customers who attended today
         $total_attended = count($_SESSION['ticked_customers']);
@@ -52,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Set a success message
         $_SESSION['attendance_message'] = 'Attendance successfully confirmed. Total customers that attended: ' . $total_attended;
-        $attendance_confirmed = true;
     }
 }
 
@@ -61,7 +110,6 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['attendance_message']);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,24 +120,8 @@ if (isset($_GET['logout'])) {
     <link rel="stylesheet" href="attendance.css">
     <script>
         function confirmAttendance() {
-            return confirm('Are you sure you want to confirm the attendance? This action will remove customers who are absent.');
+            return confirm('Are you sure you want to confirm the attendance?');
         }
-
-        function saveTickedCustomers() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const ticked = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
-            sessionStorage.setItem('ticked_customers', JSON.stringify(ticked));
-        }
-
-        function loadTickedCustomers() {
-            const ticked = JSON.parse(sessionStorage.getItem('ticked_customers') || '[]');
-            ticked.forEach(id => {
-                const checkbox = document.querySelector(`input[type="checkbox"][value="${id}"]`);
-                if (checkbox) checkbox.checked = true;
-            });
-        }
-
-        window.onload = loadTickedCustomers;
     </script>
 </head>
 <body>
@@ -101,7 +133,7 @@ if (isset($_GET['logout'])) {
         <?php endif; ?>
 
         <!-- Search form to find customer by IC number -->
-        <form method="post" action="attendance.php" onsubmit="saveTickedCustomers()">
+        <form method="post" action="attendance.php">
             <input type="text" name="search_ic" placeholder="Enter IC Number" value="<?= htmlspecialchars($search_ic) ?>">
             <button type="submit">Search</button>
         </form>
@@ -122,8 +154,8 @@ if (isset($_GET['logout'])) {
                         <td><?= htmlspecialchars($row['colour']) ?></td>
                         <td>GPS Tracker</td>
                         <td>
-                            <input type="checkbox" name="attendance[]" value="<?= htmlspecialchars($row['id']) ?>" 
-                            <?= in_array($row['id'], $_SESSION['ticked_customers']) ? 'checked' : '' ?>>
+                            <input type="checkbox" name="attendance[]" value="<?= htmlspecialchars($row['id']) ?>"
+                            <?= in_array($row['id'], $ticked_customers) ? 'checked' : '' ?>>
                         </td>
                     </tr>
                 <?php } ?>
