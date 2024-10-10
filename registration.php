@@ -57,14 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="registration.css"> <!-- Link to your CSS file -->
 </head>
 <body>
-    <div class="main-container">
-        <div class="form-left">
-            <div class="welcome">
-                <h2>Welcome</h2>
-                <p>You are 30 seconds away from starting your adventure!</p>
-                <a href="login.php" class="btn-login">Login</a>
-            </div>
-        </div>
+
 
         <div class="form-right">
             <h2>Customer Registration</h2>
