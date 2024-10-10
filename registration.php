@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $booking_date = $_POST['booking_date'];
     $color = $_POST['color'];
     $activity = $_POST['activity'];
-    $attended = 0; // Default value for attended is 0 (not attended)
+    $attended = 0; // Assuming default value for attended is 0 (not attended)
 
     // Insert into customer table
     $customer_query = "INSERT INTO customer (name, age, ic_number, address, phone_number, booking_date, colour, activity, attended) 
                        VALUES ('$name', '$age', '$ic_number', '$address', '$phone_number', '$booking_date', '$color', '$activity', '$attended')";
-    
+
     if ($conn->query($customer_query)) {
         // Check if an activity record already exists for this booking date
         $check_activity_query = "SELECT * FROM activity_record WHERE date = '$booking_date'";
@@ -59,70 +59,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="main-container">
         <div class="form-left">
-            <h2>Welcome</h2>
-            <p>You are 30 seconds away from starting your adventure!</p>
-        </div>
+            <h2>Register Customer</h2>
 
-        <div class="form-right">
-            <h2>Customer Registration</h2>
-            <form action="process_registration.php" method="POST">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Name *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="age">Age *</label>
-                        <input type="number" id="age" name="age" required>
-                    </div>
+            <!-- Show success message if registration is successful -->
+            <?php if (!empty($success_message)): ?>
+                <p class='success-message'><?php echo $success_message; ?></p>
+            <?php endif; ?>
+
+            <form method="post" action="registration.php">
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" name="name" id="name" required>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ic_number">IC Number *</label>
-                        <input type="text" id="ic_number" name="ic_number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone_number">Phone Number *</label>
-                        <input type="text" id="phone_number" name="phone_number" required>
-                    </div>
+                <div class="form-group">
+                    <label for="age">Age *</label>
+                    <input type="number" name="age" id="age" required>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="address">Address *</label>
-                        <input type="text" id="address" name="address" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="booking_date">Booking Date *</label>
-                        <input type="date" id="booking_date" name="booking_date" required>
-                    </div>
+                <div class="form-group">
+                    <label for="ic_number">IC Number *</label>
+                    <input type="text" name="ic_number" id="ic_number" required>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="color">Choose a Color *</label>
-                        <select id="color" name="color" required>
-                            <option value="Red">Red</option>
-                            <option value="Blue">Blue</option>
-                            <option value="Green">Green</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="activity">Activity *</label>
-                        <select id="activity" name="activity" required>
-                            <option value="Hiking">Hiking</option>
-                            <option value="Jungle Tracking">Jungle Tracking</option>
-                            <option value="Caving">Caving</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <input type="text" name="address" id="address" required>
                 </div>
-
-                <button type="submit" class="register-button">Register</button>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number *</label>
+                    <input type="text" name="phone_number" id="phone_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking_date">Booking Date *</label>
+                    <input type="date" name="booking_date" id="booking_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="color">Choose a Color *</label>
+                    <select name="color" id="color" required>
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="activity">Activity *</label>
+                    <input type="text" name="activity" id="activity" required>
+                </div>
+                <button type="submit" class="submit-button">Register</button>
             </form>
+            <a href="staff.php" class="back-button">Back to Dashboard</a>
         </div>
     </div>
 </body>
 </html>
-
-
