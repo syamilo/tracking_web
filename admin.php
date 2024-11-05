@@ -1,7 +1,7 @@
 <?php
 session_start();
 if ($_SESSION['role'] != 'admin') {
-    header("Location: /fyp/tracking_web/login.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -27,6 +27,7 @@ if ($_SESSION['role'] != 'admin') {
                 <a href="activity_record.php">Activity Record</a>
                 <a href="customer_record.php">Customer Record</a>
                 <a href="staff_management.php">Staff Management</a>
+                <a href="guider.php">Guider</a>
                 <a href="report_record.php">Report Record</a>
                 <a href="print_record.php">Print Record</a>
         </nav>
