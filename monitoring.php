@@ -60,15 +60,15 @@ while ($row = $result->fetch_assoc()) {
     $customers[] = $row;
 }
 
-// Duration and Countdown logic
+// Timer Logic: Save duration and start time in session
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['duration'] = $_POST['duration'] * 60 * 60; 
     $_SESSION['start_time'] = time(); 
 }
 
+// Calculate remaining time for the timer
 $duration = isset($_SESSION['duration']) ? $_SESSION['duration'] : 0;
 $start_time = isset($_SESSION['start_time']) ? $_SESSION['start_time'] : 0;
-
 $elapsed_time = time() - $start_time;
 $remaining_time = $duration - $elapsed_time;
 if ($remaining_time < 0) {
@@ -83,12 +83,11 @@ if ($remaining_time < 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Tracking</title>
     <link rel="stylesheet" href="monitoring.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAILXH4lFnWUq_LdSdDoD5UgSrFBiNIwEE&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </head>
 <body>
     <div class="container">
         <h2>Customer Tracking Information</h2>
-
         <label for="customer-select">Choose a customer:</label>
         <select id="customer-select" onchange="updateMap()">
             <option value="">Select a customer</option>
@@ -137,7 +136,7 @@ if ($remaining_time < 0) {
             <input type="number" id="duration" name="duration" min="1" max="24" required>
             <button type="submit">Set Duration</button>
             <div id="countdown-container" style="margin-left: 20px;">
-                <h3>Time Remaining: <span id="countdown"></span></h3>
+                <h3>Time Remaining: <span id="countdown"><?= $remaining_time ?></span></h3>
             </div>
         </form>
 
@@ -145,8 +144,9 @@ if ($remaining_time < 0) {
     </div>
 
     <script>
-    var map;
-    var markers = {};
+    let map;
+    let markers = {};
+    let polylinePaths = {};
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -154,6 +154,7 @@ if ($remaining_time < 0) {
             center: {lat: 6.434, lng: 100.341}
         });
         displayAllMarkers();
+        startCountdown(<?= $remaining_time ?>);
     }
 
     function displayAllMarkers() {
@@ -163,55 +164,39 @@ if ($remaining_time < 0) {
             var customerName = "<?= $customer['name'] ?>";
             var customerColor = "<?= $customer['colour'] ?>";
 
+            if (!polylinePaths[<?= $customer['id'] ?>]) {
+                polylinePaths[<?= $customer['id'] ?>] = new google.maps.Polyline({
+                    path: [],
+                    geodesic: true,
+                    strokeColor: customerColor,
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                    map: map
+                });
+            }
+
             var marker = new google.maps.Marker({
                 position: {lat: lat, lng: lng},
                 map: map,
                 title: customerName,
                 icon: createMarkerIcon(customerColor)
             });
+
             markers["<?= $customer['id'] ?>"] = marker;
+            polylinePaths[<?= $customer['id'] ?>].getPath().push({lat: lat, lng: lng});
         <?php } ?>
     }
 
     function updateMap() {
-        var select = document.getElementById('customer-select');
-        var selectedCustomerId = select.value;
-
-        document.querySelectorAll('.customer-row').forEach(function(row) {
-            row.style.display = selectedCustomerId === "" || row.getAttribute('data-id') === selectedCustomerId ? "" : "none";
-        });
-
+        let selectedCustomerId = document.getElementById('customer-select').value;
         if (selectedCustomerId) {
-            var lat = parseFloat(select.options[select.selectedIndex].getAttribute('data-lat'));
-            var lng = parseFloat(select.options[select.selectedIndex].getAttribute('data-lng'));
+            let lat = parseFloat(document.querySelector(`option[value="${selectedCustomerId}"]`).dataset.lat);
+            let lng = parseFloat(document.querySelector(`option[value="${selectedCustomerId}"]`).dataset.lng);
             map.setCenter({lat: lat, lng: lng});
         } else {
             map.setCenter({lat: 6.434, lng: 100.341});
         }
     }
-
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('location-button')) {
-            var lat = parseFloat(event.target.getAttribute('data-lat'));
-            var lng = parseFloat(event.target.getAttribute('data-lng'));
-            var color = event.target.closest('tr').getAttribute('data-color');
-
-            map.setCenter({lat: lat, lng: lng});
-
-            for (var key in markers) {
-                markers[key].setMap(null);
-            }
-            markers = {};
-
-            var marker = new google.maps.Marker({
-                position: {lat: lat, lng: lng},
-                map: map,
-                title: "Historical Location",
-                icon: createMarkerIcon(color)
-            });
-            markers["historical"] = marker;
-        }
-    });
 
     function createMarkerIcon(color) {
         return {
@@ -225,36 +210,33 @@ if ($remaining_time < 0) {
     }
 
     function showAllLocations() {
-        document.querySelectorAll('.customer-row').forEach(function(row) {
-            row.style.display = "";
-        });
         map.setCenter({lat: 6.434, lng: 100.341});
         displayAllMarkers();
     }
 
-    // Countdown timer that updates every second
-    function startCountdown(duration) {
-        var countdownDisplay = document.getElementById('countdown');
-        var remainingTime = duration;
 
-        setInterval(function() {
+    function startCountdown(remainingTime) {
+        const countdownDisplay = document.getElementById('countdown');
+        setInterval(() => {
             if (remainingTime > 0) {
-                var hours = Math.floor(remainingTime / 3600);
-                var minutes = Math.floor((remainingTime % 3600) / 60);
-                var seconds = remainingTime % 60;
-
-                countdownDisplay.textContent = 
+                let hours = Math.floor(remainingTime / 3600);
+                let minutes = Math.floor((remainingTime % 3600) / 60);
+                let seconds = remainingTime % 60;
+                countdownDisplay.innerText = 
                     (hours > 0 ? hours + "h " : "") +
                     (minutes > 0 ? minutes + "m " : "") +
                     (seconds > 0 ? seconds + "s" : "");
                 remainingTime--;
             } else {
-                countdownDisplay.textContent = "Time is up!";
+                countdownDisplay.innerText = "Time is up!";
             }
         }, 1000);
     }
 
-    startCountdown(<?= $remaining_time ?>);
+    setInterval(() => {
+        // Fetch and update GPS data every 30 seconds (pseudo-code, actual implementation may vary)
+        // fetchUpdatedGPSData();
+    }, 30000); 
     </script>
 </body>
 </html>
