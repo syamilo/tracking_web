@@ -84,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_de
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -159,7 +160,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_de
     <script>
         function fetchAvailableDevices() {
             const bookingDate = document.getElementById('booking_date').value;
-            window.location.href = `registration.php?booking_date=${bookingDate}`;
+            if (bookingDate) {
+                window.location.href = `registration.php?booking_date=${bookingDate}`;
+            }
         }
     </script>
 </head>
@@ -214,18 +217,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_de
                     <input type="text" name="activity" id="activity" required>
                 </div>
                 <div class="form-group">
-                <label for="gps_device_id">Choose GPS Device</label>
-                <select name="gps_device_id" id="gps_device_id" required>
-                    <option value="">Select a GPS Device</option>
-                    <?php foreach ($available_devices as $device): ?>
-                        <option value="<?= $device['id'] ?>"><?= htmlspecialchars($device['device_ID']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                    <label for="gps_device_id">Choose GPS Device</label>
+                    <select name="gps_device_id" id="gps_device_id" required>
+                        <option value="">Select a GPS Device</option>
+                        <?php foreach ($available_devices as $device): ?>
+                            
+<option value="<?php echo $device['id']; ?>">
+                                <?php echo htmlspecialchars($device['device_ID']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
+            
+            <div class="form-group">
+                <button type="submit" class="submit-button">Register Customer</button>
+                <a href="dashboard.php" class="back-button">Back to Dashboard</a>
             </div>
-            <button type="submit" class="submit-button">Register</button>
         </form>
-        <a href="staff.php" class="back-button">Back to Dashboard</a>
     </div>
 </body>
 </html>
