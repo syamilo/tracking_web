@@ -1,3 +1,89 @@
+<?php
+include('database_connection.php');
+session_start();
+
+if ($_SESSION['role'] != 'staff') {
+    header("Location: login.php");
+    exit();
+}
+
+$success_message = "";
+
+// Pre-set booking date if available from GET or POST
+$booking_date = $_GET['booking_date'] ?? ($_POST['booking_date'] ?? '');
+
+// Set timezone to ensure consistent date comparison
+date_default_timezone_set('Asia/Kuala_Lumpur');
+$today = date('Y-m-d');
+
+// Step 1: Clear GPS device assignments for past bookings in the gps_device table
+$clear_query = "
+    UPDATE gps_device 
+    SET customer_id = NULL 
+    WHERE customer_id IN (
+        SELECT id FROM customer 
+        WHERE booking_date < '$today'
+    )
+";
+$conn->query($clear_query);
+
+// Step 2: Fetch available GPS devices for the booking date
+$available_devices = [];
+if ($booking_date) {
+    $available_devices_query = "
+        SELECT d.id, d.device_ID 
+        FROM gps_device d
+        LEFT JOIN device_usage du ON d.id = du.device_id AND du.booking_date = '$booking_date'
+        WHERE du.device_id IS NULL
+    ";
+    $available_devices_result = $conn->query($available_devices_query);
+    while ($row = $available_devices_result->fetch_assoc()) {
+        $available_devices[] = $row;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_device_id'])) {
+    $name = $conn->real_escape_string($_POST['name']);
+    $age = $_POST['age'];
+    $ic_number = $conn->real_escape_string($_POST['ic_number']);
+    $address = $conn->real_escape_string($_POST['address']);
+    $phone_number = $conn->real_escape_string($_POST['phone_number']);
+    $booking_date = $_POST['booking_date'];
+    $color = $_POST['color'];
+    $activity = $conn->real_escape_string($_POST['activity']);
+    $gps_device_id = $_POST['gps_device_id'];
+
+    // Step 3: Insert customer details into the customer table
+    $customer_query = "INSERT INTO customer (name, age, ic_number, address, phone_number, booking_date, colour, activity) 
+                       VALUES ('$name', '$age', '$ic_number', '$address', '$phone_number', '$booking_date', '$color', '$activity')";
+
+    if ($conn->query($customer_query)) {
+        // Get the last inserted customer_id
+        $customer_id = $conn->insert_id;
+
+        // Check if device is already booked in device_usage for the selected booking date
+        $device_in_use_query = "
+            SELECT COUNT(*) AS count FROM device_usage 
+            WHERE device_id = $gps_device_id AND booking_date = '$booking_date'
+        ";
+        $device_in_use_result = $conn->query($device_in_use_query);
+        $device_in_use = $device_in_use_result->fetch_assoc()['count'];
+
+        if ($device_in_use == 0) {
+            // Insert device usage record
+            $device_usage_query = "INSERT INTO device_usage (device_id, booking_date, customer_id) 
+                                   VALUES ('$gps_device_id', '$booking_date', '$customer_id')";
+            $conn->query($device_usage_query);
+
+            $success_message = "Customer successfully registered and GPS device reserved!";
+        } else {
+            $success_message = "Error: The selected GPS device is already booked for this date.";
+        }
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
