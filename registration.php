@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_de
             
             <div class="form-group">
                 <button type="submit" class="submit-button">Register Customer</button>
-                <a href="dashboard.php" class="back-button">Back to Dashboard</a>
+                <a href="staff.php" class="back-button">Back to Dashboard</a>
             </div>
         </form>
     </div>
