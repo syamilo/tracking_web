@@ -31,7 +31,7 @@ $uri .= $_SERVER['HTTP_HOST'];
         
         <!-- Hyperlink to Login Page -->
         <a href="/fyp/tracking_web/login.php">Login</a>
-        <a href="/fyp/tracking_web/aboutus.php">About Us</a>
+        <a href="/fyp/tracking_web/about_us.php">About Us</a>
     </div>
 </body>
 </html>
