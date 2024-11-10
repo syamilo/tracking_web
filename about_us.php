@@ -101,9 +101,15 @@
                 </div>
                 <div class="member">
                 <center>
-                    <img src="img/Cied.img.jpg" alt="Team Member">
-                    <h3>Ahmad Mursyid</h3>
+                    <img src="afif.jpeg" alt="Team Member">
+                    <h3>Muhammad Afif Danish Bin Mohd Fazli</h3>
                     <p>IOT Designer</p>
+                </center>
+                </div><div class="member">
+                <center>
+                    <img src="zan.jpeg" alt="Team Member">
+                    <h3>Mohd Hafzan Azani Bin Mohd Azamin</h3>
+                    <p>Documentation</p>
                 </center>
                 </div>
             </div>
