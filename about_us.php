@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - SMART DRYING RACK</title>
+    <title>About Us - SMART TRACKING TOOLS FOR RECREATIONAL CLIMBERS</title>
    
     <style>
        
@@ -77,18 +77,20 @@
 <header>
        
     <div class="back-btn"><a href="index.php" class="back-btn">Back</a></div>
-    <div class="container"><h1>SMART DRYING RACK</h1></div>
+    <div class="container"><h1>SMART TRACKING TOOLS FOR RECREATIONAL CLIMBERS</h1></div>
     </header>
     <section class="about">
         <div class="container">
             <h2>About Us</h2>
             <p>
-            Traditional clothes drying methods often have challenges, especially with sudden weather changes like unexpected rain. In such cases, people need to quickly bring in their clothes to prevent them from getting wet again, which can be stressful and requires constant attention.
+            We specialize in providing GPS-based tracking solutions designed to enhance the experience of hiking, jungle trekking, cave exploring, and other outdoor activities for groups. Our cutting-edge system enables guides and participants to stay connected and ensures that no one is ever left behind, creating a safer environment for all.
             </p>
             <p>
-            Drying clothes in humid weather with little sunlight can also be difficult, leading to longer drying times or the need to try drying them multiple times. Using electric dryers or fans increases energy use and costs and can sometimes damage delicate fabrics.
+            Our innovative tracking solution was built with both adventurers and guides in mind. With real-time location monitoring, a proximity alert system, and easy-to-use web management, we empower outdoor enthusiasts to explore with confidence. Every five minutes, our GPS trackers update the location of each group member, providing real-time data and ensuring each individual’s safety. If anyone strays more than 20 meters from the group, an alert buzzer is triggered, helping guides and staff keep everyone within safe range
             <p>
-            Smart technology and automation offer a practical solution to these problems. The Smart Clothes Drying Rack is designed to reduce the need for constant monitoring and manual effort in drying clothes. This system uses sensors like rain sensors and humidity sensors to automatically protect clothes from rain and ensure they are dried properly. With full automation, this drying rack not only saves time but also reduces worries about sudden weather changes.
+            Beyond just technology, we believe in seamless service. Our platform enables effortless participant registration, real-time tracking, and comprehensive reporting—all managed through a user-friendly interface. Staff and administrators have powerful tools at their fingertips for managing and monitoring activities, ensuring that all essential details are organized and accessible.
+            <p>
+            We’re here to redefine outdoor group activities with safety, convenience, and peace of mind at the forefront. Whether you're leading a hike through dense jungles or exploring deep caves, we are dedicated to keeping your adventure safe, connected, and enjoyable. Join us in making every journey a safe and memorable experience.
             </p>
             <div class="divider"></div>
             <div class="team">
@@ -109,7 +111,7 @@
                 <center>
                     <img src="zan.jpeg" alt="Team Member">
                     <h3>Mohd Hafzan Azani Bin Mohd Azamin</h3>
-                    <p>Documentation</p>
+                    <p>Writer and Documentation</p>
                 </center>
                 </div>
             </div>
@@ -117,7 +119,7 @@
     </section>
     <footer>
         <div class="container">
-            <p>&copy; <?php echo date("Y"); ?> Smart Drying Rack. All rights reserved.</p>
+            <p>&copy; <?php echo date("Y"); ?> Smart Tracking Tools For Recreational Climber. All rights reserved.</p>
         </div>
     </footer>
 </body>
