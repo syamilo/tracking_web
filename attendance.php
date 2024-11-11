@@ -22,9 +22,9 @@ if (!isset($_SESSION['attendance_message'])) {
 // Check if search is performed
 $search_ic = isset($_POST['search_ic']) ? $_POST['search_ic'] : '';
 
-// Query to retrieve customer information along with assigned GPS device name for today's booking
+// Query to retrieve customer information along with assigned GPS device ID (as tracker name) for today's booking
 $query = "
-    SELECT customer.*, gps_device.device_name AS device_name
+    SELECT customer.*, gps_device.device_ID AS tracker_name
     FROM customer 
     LEFT JOIN device_usage ON customer.id = device_usage.customer_id 
     LEFT JOIN gps_device ON device_usage.device_id = gps_device.id
@@ -158,7 +158,7 @@ if (isset($_GET['logout'])) {
                         <td><?= htmlspecialchars($row['name']) ?></td>
                         <td><?= htmlspecialchars($row['ic_number']) ?></td>
                         <td><?= htmlspecialchars($row['colour']) ?></td>
-                        <td><?= htmlspecialchars($row['device_name']) ?></td>
+                        <td><?= htmlspecialchars($row['tracker_name']) ?></td>
                         <td>
                             <input type="checkbox" name="attendance[]" value="<?= htmlspecialchars($row['id']) ?>"
                             <?= in_array($row['id'], $ticked_customers) ? 'checked' : '' ?>>
