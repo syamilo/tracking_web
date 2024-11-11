@@ -22,23 +22,23 @@ if (!isset($_SESSION['attendance_message'])) {
 // Check if search is performed
 $search_ic = isset($_POST['search_ic']) ? $_POST['search_ic'] : '';
 
-// Query to retrieve customer information for today's booking
+// Query to retrieve customer information along with assigned GPS device for today's booking
 $query = "
-    SELECT customer.*, gps_device.device_ID
+    SELECT customer.*, device_usage.device_id AS device_ID
     FROM customer 
-    LEFT JOIN gps_device ON customer.gps_device_id = gps_device.id 
-    WHERE booking_date='$today'
+    LEFT JOIN device_usage ON customer.id = device_usage.customer_id 
+    WHERE customer.booking_date = '$today'
 ";
 
 // If an IC number is searched, filter the result by the IC number
 if (!empty($search_ic)) {
-    $query .= " AND ic_number LIKE '%$search_ic%'";
+    $query .= " AND customer.ic_number LIKE '%$search_ic%'";
 }
 
 $result = $conn->query($query);
 
 // Load attendance data from the 'attendance' table for today
-$attendance_query = "SELECT customer_id, status FROM attendance WHERE attendance_date='$today'";
+$attendance_query = "SELECT customer_id, status FROM attendance WHERE attendance_date = '$today'";
 $attendance_result = $conn->query($attendance_query);
 
 // Initialize an array to store the ticked customers (present)
@@ -58,12 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Insert or update attendance records in the 'attendance' table
         foreach ($attended_ids as $customer_id) {
             // Check if the record already exists
-            $check_query = "SELECT id FROM attendance WHERE customer_id='$customer_id' AND attendance_date='$today'";
+            $check_query = "SELECT id FROM attendance WHERE customer_id = '$customer_id' AND attendance_date = '$today'";
             $check_result = $conn->query($check_query);
 
             if ($check_result->num_rows > 0) {
                 // Update the existing record to 'present'
-                $update_query = $conn->prepare("UPDATE attendance SET status='present' WHERE customer_id=? AND attendance_date=?");
+                $update_query = $conn->prepare("UPDATE attendance SET status = 'present' WHERE customer_id = ? AND attendance_date = ?");
                 $update_query->bind_param("is", $customer_id, $today);
                 $update_query->execute();
             } else {
@@ -75,19 +75,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Insert or update records for absent customers
-        $absent_query = "SELECT id FROM customer WHERE booking_date='$today' AND id NOT IN (" . implode(',', array_map('intval', $attended_ids)) . ")";
+        $absent_query = "SELECT id FROM customer WHERE booking_date = '$today' AND id NOT IN (" . implode(',', array_map('intval', $attended_ids)) . ")";
         $absent_result = $conn->query($absent_query);
 
         while ($row = $absent_result->fetch_assoc()) {
             $absent_customer_id = $row['id'];
 
             // Check if the record already exists
-            $check_absent_query = "SELECT id FROM attendance WHERE customer_id='$absent_customer_id' AND attendance_date='$today'";
+            $check_absent_query = "SELECT id FROM attendance WHERE customer_id = '$absent_customer_id' AND attendance_date = '$today'";
             $check_absent_result = $conn->query($check_absent_query);
 
             if ($check_absent_result->num_rows > 0) {
                 // Update the existing record to 'absent'
-                $update_absent_query = $conn->prepare("UPDATE attendance SET status='absent' WHERE customer_id=? AND attendance_date=?");
+                $update_absent_query = $conn->prepare("UPDATE attendance SET status = 'absent' WHERE customer_id = ? AND attendance_date = ?");
                 $update_absent_query->bind_param("is", $absent_customer_id, $today);
                 $update_absent_query->execute();
             } else {
