@@ -124,7 +124,7 @@ if (isset($_GET['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
-    <link rel="stylesheet" href="attendance.css">
+    <link rel="stylesheet" href="">
     <script>
         function confirmAttendance() {
             return confirm('Are you sure you want to confirm the attendance?');
