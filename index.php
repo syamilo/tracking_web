@@ -14,7 +14,7 @@ $uri .= $_SERVER['HTTP_HOST'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Our Company</title>
-    <link rel="stylesheet" href="index.css"> <!-- Optional: Add your own CSS for styling -->
+    <link rel="stylesheet" href="indexx.css"> <!-- Optional: Add your own CSS for styling -->
 </head>
 <body>
     <div class="welcome-container">
