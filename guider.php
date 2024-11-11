@@ -2,15 +2,13 @@
 include('database_connection.php');
 session_start();
 
+// Only admins can access this page
 if ($_SESSION['role'] != 'admin') {
     header("Location: login.php");
     exit();
 }
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+date_default_timezone_set('Asia/Kuala_Lumpur'); // Set timezone if needed
 
 $message = ''; // Initialize message
 
@@ -65,7 +63,6 @@ if ($view == 'not_assigned') {
 }
 
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +81,7 @@ $result = $conn->query($sql);
 
         <!-- Table Title Based on Selected View -->
         <h2><?= $view == 'not_assigned' ? 'Booking Dates Without Assigned Guiders:' : 'Booking Dates With Assigned Guiders:' ?></h2>
+        
         <!-- Buttons to toggle between views -->
         <form method="POST" action="">
             <button type="submit" name="view" value="not_assigned" <?= ($view == 'not_assigned') ? 'disabled' : ''; ?>>
@@ -93,6 +91,7 @@ $result = $conn->query($sql);
                 Show Assigned Guider Dates
             </button>
         </form>
+
         <table border="1">
             <tr>
                 <th>Booking Date</th>
