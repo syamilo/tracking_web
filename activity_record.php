@@ -8,7 +8,6 @@ if ($_SESSION['role'] != 'admin') {
     exit();
 }
 
-
 // Query to get total participants from the activity_record table
 $query = "SELECT date, total_activity FROM activity_record";
 $result = $conn->query($query);
@@ -19,8 +18,14 @@ $date = null;
 // Check if a specific date is selected to fetch activity details
 if (isset($_GET['date'])) {
     $date = $_GET['date'];
-    // Prepared statement for security
-    $stmt = $conn->prepare("SELECT name, ic_number FROM customer WHERE booking_date = ?");
+    
+    // Prepared statement to fetch activity details and group by activity type
+    $stmt = $conn->prepare("
+        SELECT activity, COUNT(*) as total_participants
+        FROM customer
+        WHERE booking_date = ?
+        GROUP BY activity
+    ");
     $stmt->bind_param("s", $date);
     $stmt->execute();
     $activity_result = $stmt->get_result();
@@ -67,15 +72,15 @@ if (isset($_GET['date'])) {
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>IC Number</th>
+                        <th>Activity</th>
+                        <th>Total Participants</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php while ($row = $activity_result->fetch_assoc()) { ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['name']) ?></td>
-                            <td><?= htmlspecialchars($row['ic_number']) ?></td>
+                            <td><?= htmlspecialchars($row['activity']) ?></td>
+                            <td><?= htmlspecialchars($row['total_participants']) ?></td>
                         </tr>
                     <?php } ?>
                 </tbody>
