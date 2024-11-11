@@ -93,10 +93,11 @@ header {
 }
 
 .dashboard-item img {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 10px;
+    width: 120px; /* Set a fixed width */
+    height: 120px; /* Set a fixed height */
+    object-fit: contain; /* Ensures the entire icon is contained within the area */
 }
+
 
 .dashboard-item p {
     font-size: 1.2rem;

@@ -43,7 +43,7 @@ if ($_SESSION['role'] != 'admin') {
             <p>Booking Date and Guider</p>
         </a>
         <a href="report_record.php" class="dashboard-item">
-            <img src="icon_monitor.png" alt="Report Record Icon">
+            <img src="reprec_icon.png" alt="Report Record Icon">
             <p>Report Record</p>
         </a>
         <a href="print_record.php" class="dashboard-item">
