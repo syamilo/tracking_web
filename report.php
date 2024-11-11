@@ -5,6 +5,7 @@ if ($_SESSION['role'] != 'staff') {
     header("Location: login.php");
     exit();
 }
+date_default_timezone_set('Asia/Kuala_Lumpur'); // Replace with your actual timezone
 
 // Initialize success message
 $success_message = '';
