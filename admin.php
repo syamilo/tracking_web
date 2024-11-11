@@ -27,15 +27,15 @@ if ($_SESSION['role'] != 'admin') {
     <h1>Staff Menu</h1>
     <div class="dashboard-links">
         <a href="activity_record.php" class="dashboard-item">
-            <img src="register_icon.png" alt="Activity Record Icon">
+            <img src="act_rec.png" alt="Activity Record Icon">
             <p>Activity Record</p>
         </a>
         <a href="customer_record.php" class="dashboard-item">
-            <img src="icon_attendances.png" alt="Customer Record Icon">
+            <img src="cus_rec.png" alt="Customer Record Icon">
             <p>Customer Record</p>
         </a>
         <a href="staff_management.php" class="dashboard-item">
-            <img src="icon_monitor.png" alt="Staff Management Icon">
+            <img src="setaf_icon.png" alt="Staff Management Icon">
             <p>Staff Management</p>
         </a>
         <a href="guider.php" class="dashboard-item">
