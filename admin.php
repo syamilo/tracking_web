@@ -39,17 +39,15 @@ if ($_SESSION['role'] != 'admin') {
             <p>Staff Management</p>
         </a>
         <a href="guider.php" class="dashboard-item">
-            <img src="report_icon.png" alt="Booking Date and Guider Icon">
-            <p>Booking Date
-                and Guider
-            </p>
+            <img src="guider_icon.png" alt="Booking Date and Guider Icon">
+            <p>Assign Guider</p>
         </a>
         <a href="report_record.php" class="dashboard-item">
             <img src="reprec_icon.png" alt="Report Record Icon">
             <p>Report Record</p>
         </a>
         <a href="print_record.php" class="dashboard-item">
-            <img src="icon_monitor.png" alt="Print Record Icon">
+            <img src="print_icon.png" alt="Print Record Icon">
             <p>Print Record</p>
         </a>
     </div>
