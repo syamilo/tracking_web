@@ -28,7 +28,8 @@ $query = "
     FROM customer 
     LEFT JOIN device_usage ON customer.id = device_usage.customer_id 
     LEFT JOIN gps_device ON device_usage.device_id = gps_device.id
-
+    WHERE customer.booking_date = '$today' 
+      AND device_usage.booking_date = '$today'
 ";
 
 // If an IC number is searched, filter the result by the IC number
