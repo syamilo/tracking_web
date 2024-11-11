@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['assign_guider'])) {
     $guider_id = $_POST['guider'];
 
     // Insert guider assignment into the guider table
-    $stmt = $conn->prepare("INSERT INTO guider (user_id, booking_date) VALUES (?, ?)");
+    $stmt = $conn->prepare("INSERT INTO guider (users_id, booking_date) VALUES (?, ?)");
     if ($stmt === false) {
         die('Prepare failed: ' . htmlspecialchars($conn->error));
     }
@@ -39,7 +39,7 @@ $view = isset($_POST['view']) ? $_POST['view'] : 'not_assigned';  // Default to 
 // Query to fetch booking dates that already have a guider assigned
 $assigned_sql = "SELECT booking_date, users.name AS guider_name 
                  FROM guider 
-                 JOIN users ON guider.user_id = users.id";
+                 JOIN users ON guider.users_id = users.id";
 $assigned_result = $conn->query($assigned_sql);
 
 // Get assigned dates in an array
