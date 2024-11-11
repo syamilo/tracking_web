@@ -8,6 +8,7 @@ if ($_SESSION['role'] != 'staff') {
 }
 
 $today = date('Y-m-d');
+date_default_timezone_set('Asia/Kuala_Lumpur'); // Replace with your actual timezone
 
 // Initialize session for ticked customers if not already set
 if (!isset($_SESSION['ticked_customers'])) {
