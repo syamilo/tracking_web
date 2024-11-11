@@ -76,7 +76,7 @@ header {
 /* Adjust the dashboard links to display a single column of items */
 .dashboard-links {
     display: grid;
-    grid-template-columns: 1fr; /* One icon per row */
+    grid-template-columns: 4fr; /* One icon per row */
     gap: 20px; /* Adjust spacing between icons as needed */
     width: 100%;
     max-width: 400px; /* Optional: limit width for centering */
