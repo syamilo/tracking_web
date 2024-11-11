@@ -74,21 +74,23 @@ header {
 
 /* Dashboard links arranged in 2x2 grid */
 /* Adjust the dashboard links to display a single column of items */
+/* Arrange icons in a single row with four columns */
 .dashboard-links {
     display: grid;
-    grid-template-columns: 4fr; /* One icon per row */
-    gap: 20px; /* Adjust spacing between icons as needed */
+    grid-template-columns: repeat(4, 1fr); /* Four icons per row */
+    gap: 20px; /* Space between icons */
     width: 100%;
-    max-width: 400px; /* Optional: limit width for centering */
+    max-width: 1000px; /* Adjust as needed for centering */
     justify-items: center;
 }
 
-/* Adjust icon size here */
+/* Adjust icon size */
 .dashboard-item img {
-    width: 120px; /* Adjust the width of the icon */
-    height: 120px; /* Adjust the height of the icon */
+    width: 100px; /* Adjust icon width */
+    height: 100px; /* Adjust icon height */
     margin-bottom: 10px;
 }
+
 
 
 .dashboard-item {
