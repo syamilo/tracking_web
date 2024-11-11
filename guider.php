@@ -19,12 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['assign_guider'])) {
 
     // Insert guider assignment into the guider table
     $stmt = $conn->prepare("INSERT INTO guider (user_id, booking_date) VALUES (?, ?)");
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
     $stmt->bind_param("is", $guider_id, $booking_date);
 
     if ($stmt->execute()) {
         $message = "Guider assigned successfully for " . htmlspecialchars($booking_date) . "!";
     } else {
-        $message = "Error assigning guider: " . $stmt->error;
+        $message = "Error assigning guider: " . htmlspecialchars($stmt->error);
     }
 
     $stmt->close();
@@ -63,6 +66,9 @@ if ($view == 'not_assigned') {
 }
 
 $result = $conn->query($sql);
+if ($result === false) {
+    die('Query failed: ' . htmlspecialchars($conn->error));
+}
 ?>
 
 <!DOCTYPE html>
@@ -109,7 +115,7 @@ $result = $conn->query($sql);
 
                     if ($view == 'assigned') {
                         // If showing assigned guiders, display the guider name
-                        echo "<td>Assigned to " . $assigned_dates[$date] . "</td></tr>";
+                        echo "<td>Assigned to " . htmlspecialchars($assigned_dates[$date]) . "</td></tr>";
                     } else {
                         // If showing unassigned dates, show 'Not Assigned'
                         echo "<td>Not Assigned</td></tr>";
@@ -134,7 +140,7 @@ $result = $conn->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             $date = $row['booking_date'];
                             $formatted_date = (new DateTime($date))->format('d/m/Y');
-                            echo "<option value='" . $row['booking_date'] . "'>" . $formatted_date . "</option>";
+                            echo "<option value='" . htmlspecialchars($row['booking_date']) . "'>" . htmlspecialchars($formatted_date) . "</option>";
                         }
                         ?>
                     </select>
@@ -149,7 +155,7 @@ $result = $conn->query($sql);
                         if ($guider_result->num_rows > 0) {
                             // Output each guider as an option
                             while ($guider_row = $guider_result->fetch_assoc()) {
-                                echo "<option value='" . $guider_row['id'] . "'>" . $guider_row['name'] . "</option>";
+                                echo "<option value='" . htmlspecialchars($guider_row['id']) . "'>" . htmlspecialchars($guider_row['name']) . "</option>";
                             }
                         } else {
                             echo "<option value=''>No available guiders</option>";
