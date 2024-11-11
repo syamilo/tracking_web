@@ -40,7 +40,9 @@ if ($_SESSION['role'] != 'admin') {
         </a>
         <a href="guider.php" class="dashboard-item">
             <img src="report_icon.png" alt="Booking Date and Guider Icon">
-            <p>Booking Date and Guider</p>
+            <p>Booking Date
+                and Guider
+            </p>
         </a>
         <a href="report_record.php" class="dashboard-item">
             <img src="reprec_icon.png" alt="Report Record Icon">
