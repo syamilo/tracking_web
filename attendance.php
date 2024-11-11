@@ -22,13 +22,13 @@ if (!isset($_SESSION['attendance_message'])) {
 // Check if search is performed
 $search_ic = isset($_POST['search_ic']) ? $_POST['search_ic'] : '';
 
-// Query to retrieve customer information along with assigned GPS device ID (as tracker name) for today's booking
+// Query to retrieve customer information along with assigned GPS device for today's booking in both tables
 $query = "
     SELECT customer.*, gps_device.device_ID AS tracker_name
     FROM customer 
     LEFT JOIN device_usage ON customer.id = device_usage.customer_id 
     LEFT JOIN gps_device ON device_usage.device_id = gps_device.id
-    WHERE customer.booking_date = '$today'
+    WHERE customer.booking_date = '$today' AND device_usage.booking_date = '$today'
 ";
 
 // If an IC number is searched, filter the result by the IC number
