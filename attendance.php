@@ -157,7 +157,7 @@ if (isset($_GET['logout'])) {
                         <td><?= htmlspecialchars($row['name']) ?></td>
                         <td><?= htmlspecialchars($row['ic_number']) ?></td>
                         <td><?= htmlspecialchars($row['colour']) ?></td>
-                        <td><?= htmlspecialchars($row['device_ID'] ?? 'N/A') ?></td>
+                        <td><?= htmlspecialchars($row['device_ID']) ?></td>
                         <td>
                             <input type="checkbox" name="attendance[]" value="<?= htmlspecialchars($row['id']) ?>"
                             <?= in_array($row['id'], $ticked_customers) ? 'checked' : '' ?>>
