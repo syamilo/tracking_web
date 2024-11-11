@@ -8,20 +8,20 @@ if ($_SESSION['role'] != 'admin') {
     exit();
 }
 
-// Query to get total participants from the activity_record table for all dates
-$query = "SELECT date, total_activity FROM activity_record";
+// Retrieve all records from the activity_record table to display total participants per date
+$query = "SELECT date, total_activity FROM activity_record ORDER BY date DESC";
 $result = $conn->query($query);
 
 $activity_result = null;
 $date = null;
 
-// Check if a specific date is selected to fetch activity details
+// If a specific date is selected, fetch detailed activity counts for that date
 if (isset($_GET['date'])) {
     $date = $_GET['date'];
     
     // Prepared statement to fetch activity details grouped by activity type for the selected date
     $stmt = $conn->prepare("
-        SELECT activity, COUNT(*) as total_participants
+        SELECT activity, COUNT(*) AS total_participants
         FROM customer
         WHERE booking_date = ?
         GROUP BY activity
@@ -53,8 +53,7 @@ if (isset($_GET['date'])) {
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()) { 
-                    // Format the date to d-m-Y
-                    $formatted_date = date('d-m-Y', strtotime($row['date']));
+                    $formatted_date = date('d-m-Y', strtotime($row['date'])); // Format date as d-m-Y
                 ?>
                     <tr>
                         <td><a href="activity_record.php?date=<?= $row['date'] ?>"><?= $formatted_date ?></a></td>
@@ -65,8 +64,7 @@ if (isset($_GET['date'])) {
         </table>
 
         <?php if ($activity_result && $activity_result->num_rows > 0) { 
-            // Format the selected date to d-m-Y
-            $formatted_selected_date = date('d-m-Y', strtotime($date));
+            $formatted_selected_date = date('d-m-Y', strtotime($date)); // Format selected date
         ?>
             <h3>Activity Details for <?= htmlspecialchars($formatted_selected_date) ?></h3>
             <table>
