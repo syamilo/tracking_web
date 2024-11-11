@@ -148,6 +148,7 @@ if (isset($_GET['logout'])) {
                     <th>Colour</th>
                     <th>GPS Tracker</th>
                     <th>Attendance</th>
+                    <th>Attendance</th>
                 </tr>
                 <?php while ($row = $result->fetch_assoc()) { ?>
                     <tr>

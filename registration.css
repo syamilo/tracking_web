@@ -54,7 +54,7 @@ select:focus {
 }
 
 .submit-button {
-    background-color: #007BFF;
+    background-color: green;
     color: white;
     padding: 10px;
     border: none;
@@ -64,7 +64,7 @@ select:focus {
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    background-color: green;
 }
 
 .back-button {
