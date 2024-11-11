@@ -23,7 +23,12 @@ if (!isset($_SESSION['attendance_message'])) {
 $search_ic = isset($_POST['search_ic']) ? $_POST['search_ic'] : '';
 
 // Query to retrieve customer information for today's booking
-$query = "SELECT * FROM customer WHERE booking_date='$today'";
+$query = "
+    SELECT customer.*, gps_device.device_ID
+    FROM customer 
+    LEFT JOIN gps_device ON customer.gps_device_id = gps_device.id 
+    WHERE booking_date='$today'
+";
 
 // If an IC number is searched, filter the result by the IC number
 if (!empty($search_ic)) {
@@ -152,7 +157,7 @@ if (isset($_GET['logout'])) {
                         <td><?= htmlspecialchars($row['name']) ?></td>
                         <td><?= htmlspecialchars($row['ic_number']) ?></td>
                         <td><?= htmlspecialchars($row['colour']) ?></td>
-                        <td>GPS Tracker</td>
+                        <td><?= htmlspecialchars($row['device_ID'] ?? 'N/A') ?></td>
                         <td>
                             <input type="checkbox" name="attendance[]" value="<?= htmlspecialchars($row['id']) ?>"
                             <?= in_array($row['id'], $ticked_customers) ? 'checked' : '' ?>>
