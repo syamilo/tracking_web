@@ -8,7 +8,7 @@ if ($_SESSION['role'] != 'admin') {
     exit();
 }
 
-// Query to get total participants from the activity_record table
+// Query to get total participants from the activity_record table for all dates
 $query = "SELECT date, total_activity FROM activity_record";
 $result = $conn->query($query);
 
@@ -19,7 +19,7 @@ $date = null;
 if (isset($_GET['date'])) {
     $date = $_GET['date'];
     
-    // Prepared statement to fetch activity details and group by activity type
+    // Prepared statement to fetch activity details grouped by activity type for the selected date
     $stmt = $conn->prepare("
         SELECT activity, COUNT(*) as total_participants
         FROM customer
@@ -64,7 +64,7 @@ if (isset($_GET['date'])) {
             </tbody>
         </table>
 
-        <?php if ($activity_result) { 
+        <?php if ($activity_result && $activity_result->num_rows > 0) { 
             // Format the selected date to d-m-Y
             $formatted_selected_date = date('d-m-Y', strtotime($date));
         ?>
@@ -85,6 +85,8 @@ if (isset($_GET['date'])) {
                     <?php } ?>
                 </tbody>
             </table>
+        <?php } elseif ($date) { ?>
+            <p>No activity records found for <?= htmlspecialchars($formatted_selected_date) ?></p>
         <?php } ?>
 
         <!-- Back Button -->
