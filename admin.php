@@ -14,6 +14,7 @@ if ($_SESSION['role'] != 'admin') {
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+    <!-- Header with user info and logout button -->
     <header>
         <div class="user-info">
             <p>Welcome, <?= $_SESSION['username'] ?></p>
@@ -21,16 +22,35 @@ if ($_SESSION['role'] != 'admin') {
         </div>
     </header>
 
+    <!-- Main container for the dashboard with icons -->
     <div class="dashboard-container">
-        <h1>Welcome Admin</h1>
-        <nav>
-                <a href="activity_record.php">Activity Record</a>
-                <a href="customer_record.php">Customer Record</a>
-                <a href="staff_management.php">Staff Management</a>
-                <a href="guider.php">Guider</a>
-                <a href="report_record.php">Report Record</a>
-                <a href="print_record.php">Print Record</a>
-        </nav>
+        <h1>Staff Menu</h1>
+        <div class="dashboard-links">
+            <a href="activity_record.php" class="dashboard-item">
+                <img src="register_icon.png" alt="Activity Record Icon">
+                <p>Activity Record</p>
+            </a>
+            <a href="customer_record.php" class="dashboard-item">
+                <img src="icon_attendances.png" alt="Customer Record Icon">
+                <p>Customer Record</p>
+            </a>
+            <a href="staff_management.php" class="dashboard-item">
+                <img src="icon_monitor.png" alt="Staff Management Icon">
+                <p>Staff Management</p>
+            </a>
+            <a href="guider.php" class="dashboard-item">
+                <img src="report_icon.png" alt="Booking Date and Guider Icon">
+                <p>Booking Date and Guider</p>
+            </a>
+            <a href="report_record.php" class="dashboard-item">
+                <img src="icon_monitor.png" alt="report Record Icon">
+                <p>Report Recordt</p>
+            </a>
+            <a href="print_record.php" class="dashboard-item">
+                <img src="icon_monitor.png" alt="Print Record Icon">
+                <p>Print Record</p>
+            </a>
+        </div>
     </div>
 </body>
 </html>
