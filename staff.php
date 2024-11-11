@@ -31,7 +31,7 @@ if ($_SESSION['role'] != 'staff') {
                 <img src="register_icon.png" alt="Registration Icon">
                 <p>Registration</p>
             </a>
-            <a href="attend.php" class="dashboard-item">
+            <a href="attendance.php" class="dashboard-item">
                 <img src="icon_attendances.png" alt="Attendance Icon">
                 <p>Attendance</p>
             </a>
