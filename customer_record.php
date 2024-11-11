@@ -16,14 +16,17 @@ $customers_result = $conn->query($query);
 
 $attendance_data = [];
 
-// If attendance is requested, fetch attendance data for each customer
+// Fetch the latest attendance status for each customer
 if ($show_attendance) {
-    $attendance_query = "SELECT customer_id, status FROM attendance WHERE attendance_date = CURDATE()";
+    $attendance_query = "SELECT customer_id, status, attendance_date FROM attendance WHERE attendance_date = (SELECT MAX(attendance_date) FROM attendance WHERE customer_id = attendance.customer_id)";
     $attendance_result = $conn->query($attendance_query);
 
     // Store attendance information in an associative array for easy lookup
     while ($row = $attendance_result->fetch_assoc()) {
-        $attendance_data[$row['customer_id']] = $row['status'];
+        $attendance_data[$row['customer_id']] = [
+            'status' => $row['status'],
+            'date' => $row['attendance_date']
+        ];
     }
 }
 ?>
@@ -45,12 +48,11 @@ if ($show_attendance) {
         <h2>Customer Records</h2>
 
         <form method="get" action="customer_record.php">
-    <div class="button-container">
-        <button type="submit" name="show_attendance" value="0" <?= !$show_attendance ? 'disabled' : '' ?>>Register</button>
-        <button type="submit" name="show_attendance" value="1" <?= $show_attendance ? 'disabled' : '' ?>>Attendance</button>
-    </div>
-</form>
-
+            <div class="button-container">
+                <button type="submit" name="show_attendance" value="0" <?= !$show_attendance ? 'disabled' : '' ?>>Register</button>
+                <button type="submit" name="show_attendance" value="1" <?= $show_attendance ? 'disabled' : '' ?>>Attendance</button>
+            </div>
+        </form>
 
         <table>
             <thead>
@@ -73,8 +75,13 @@ if ($show_attendance) {
                     $formatted_date = date('d-m-Y', strtotime($row['booking_date']));
 
                     // Determine if attendance data exists for the customer
-                    $attendance_status = isset($attendance_data[$row['id']]) ? $attendance_data[$row['id']] : 'absent';
-                    $row_class = ($attendance_status == 'present') ? 'present' : 'absent';
+                    if (isset($attendance_data[$row['id']])) {
+                        $attendance_status = $attendance_data[$row['id']]['status'];
+                        $row_class = ($attendance_status == 'present') ? 'present' : 'absent';
+                    } else {
+                        $attendance_status = 'absent';
+                        $row_class = 'absent';
+                    }
                 ?>
                     <tr class="<?= $show_attendance ? $row_class : '' ?>">
                         <td><?= htmlspecialchars($row['name']) ?></td>
