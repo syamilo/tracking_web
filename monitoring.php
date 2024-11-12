@@ -32,7 +32,7 @@ if (!$conn->query($assign_query)) {
     die("Assign query failed: " . $conn->error);
 }
 
-// Fetch customers with bookings for today and their GPS data
+// Fetch customers with bookings for today and their GPS data if marked as present
 $query = "
     SELECT customer.*, 
            gps_device.latitude, 
@@ -47,7 +47,10 @@ $query = "
         GROUP BY customer_id
     ) AS latest_gps ON gps_device.customer_id = latest_gps.customer_id 
                       AND gps_device.timestamp = latest_gps.latest_timestamp
-    WHERE customer.booking_date = '$today'
+    JOIN attendance ON attendance.customer_id = customer.id 
+    WHERE customer.booking_date = '$today' 
+          AND attendance.attendance_date = '$today' 
+          AND attendance.status = 'present'
     ORDER BY customer.booking_date DESC
 ";
 $result = $conn->query($query);
