@@ -7,8 +7,9 @@ if ($_SESSION['role'] != 'staff') {
 }
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-// Initialize success message
+// Initialize success message and report details
 $success_message = '';
+$report_details = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -30,8 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   VALUES ('$customer_id', '$customer_name', '$description', '$location', '$date')";
 
         if ($conn->query($query) === TRUE) {
-            // Set success message
+            // Set success message and prepare report details for printing
             $success_message = 'Accident report submitted successfully.';
+            $report_details = "
+                <h3>Accident Report</h3>
+                <p><strong>Date:</strong> $date</p>
+                <p><strong>Customer:</strong> $customer_name</p>
+                <p><strong>Location:</strong> $location</p>
+                <p><strong>Description:</strong> $description</p>
+            ";
         } else {
             // Set error message
             $success_message = 'Error: ' . $conn->error;
@@ -50,6 +58,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Accident Report</title>
     <link rel="stylesheet" href="report.css">
+    <script>
+        function printReport() {
+            const printContents = document.getElementById('report-details').innerHTML;
+            const originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // Reload to restore the page
+        }
+    </script>
 </head>
 <body>
     <div class="form-container">
@@ -97,6 +116,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit">Submit Report</button>
             <a href="staff.php" class="back-button">Back to Staff Dashboard</a>
         </form>
+
+        <!-- Print Report Section -->
+        <?php if (!empty($report_details)): ?>
+            <div id="report-details" style="margin-top: 20px;">
+                <?= $report_details ?>
+                <button onclick="printReport()">Print Report</button>
+            </div>
+        <?php endif; ?>
     </div>
 </body>
 </html>
