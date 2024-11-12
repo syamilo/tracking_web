@@ -24,7 +24,7 @@ if ($_SESSION['role'] != 'admin') {
 
     <!-- Main container for the dashboard with icons -->
     <div class="dashboard-container">
-    <h1>Staff Menu</h1>
+    <h1>Admin Menu</h1>
     <div class="dashboard-links">
         <a href="activity_record.php" class="dashboard-item">
             <img src="act_rec.png" alt="Activity Record Icon">
