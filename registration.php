@@ -213,17 +213,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['gps_de
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="activity">Activity</label>
-                    <input type="text" name="activity" id="activity" required>
+                    <label for="activity">Choose an Activity</label>
+                    <select name="activity" id="activity" required>
+                        <option value="">Select an Activity</option>
+                        <option value="Hiking">Hiking</option>
+                        <option value="Jungle Tracking">Jungle Tracking</option>
+                        <option value="Caving">Caving</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="gps_device_id">Choose GPS Device</label>
                     <select name="gps_device_id" id="gps_device_id" required>
                         <option value="">Select a GPS Device</option>
                         <?php foreach ($available_devices as $device): ?>
-                            
-<option value="<?php echo $device['id']; ?>">
-                                <?php echo htmlspecialchars($device['device_ID']); ?>
+                            <option value="<?= htmlspecialchars($device['id']); ?>">
+                                <?= htmlspecialchars($device['device_ID']); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
