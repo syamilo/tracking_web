@@ -23,6 +23,9 @@ $date = null;
 if (isset($_GET['date'])) {
     $date = $_GET['date'];
     
+    // Debugging: Print the selected date
+    echo "Selected date: " . htmlspecialchars($date) . "<br>";
+
     // Prepared statement to fetch activity details grouped by activity type for the selected date
     $stmt = $conn->prepare("
         SELECT LOWER(activity) AS activity, COUNT(*) AS total_participants
@@ -33,6 +36,13 @@ if (isset($_GET['date'])) {
     $stmt->bind_param("s", $date);
     $stmt->execute();
     $activity_result = $stmt->get_result();
+
+    // Debugging: Check if the query returns any data
+    if ($activity_result->num_rows > 0) {
+        echo "Activities found for the selected date.<br>";
+    } else {
+        echo "No activities found for the selected date.<br>";
+    }
 }
 ?>
 
