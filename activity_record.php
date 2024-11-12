@@ -21,10 +21,10 @@ if (isset($_GET['date'])) {
     
     // Prepared statement to fetch activity details grouped by activity type for the selected date
     $stmt = $conn->prepare("
-        SELECT activity, COUNT(*) AS total_participants
+        SELECT LOWER(activity) AS activity, COUNT(*) AS total_participants
         FROM customer
         WHERE booking_date = ?
-        GROUP BY activity
+        GROUP BY LOWER(activity)
     ");
     $stmt->bind_param("s", $date);
     $stmt->execute();
@@ -77,7 +77,7 @@ if (isset($_GET['date'])) {
                 <tbody>
                     <?php while ($row = $activity_result->fetch_assoc()) { ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['activity']) ?></td>
+                            <td><?= htmlspecialchars(ucwords($row['activity'])) ?></td>
                             <td><?= htmlspecialchars($row['total_participants']) ?></td>
                         </tr>
                     <?php } ?>
