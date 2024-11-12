@@ -5,7 +5,7 @@ if ($_SESSION['role'] != 'staff') {
     header("Location: login.php");
     exit();
 }
-date_default_timezone_set('Asia/Kuala_Lumpur'); // Replace with your actual timezone
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
 // Initialize success message
 $success_message = '';
@@ -67,16 +67,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Get today's date
                 $today = date('Y-m-d');
                 
-                // Query to get customers registered today
-                $customers = $conn->query("SELECT id, name FROM customer WHERE DATE(booking_date) = '$today'");
+                // Query to get customers who attended today
+                $customers = $conn->query("
+                    SELECT customer.id, customer.name 
+                    FROM customer 
+                    JOIN attendance ON customer.id = attendance.customer_id 
+                    WHERE DATE(customer.booking_date) = '$today' 
+                      AND attendance.attendance_date = '$today' 
+                      AND attendance.status = 'present'
+                ");
                 
-                // Populate the dropdown with today's customers
+                // Populate the dropdown with customers who attended today
                 if ($customers->num_rows > 0) {
                     while ($row = $customers->fetch_assoc()) {
                         echo "<option value='{$row['id']}'>{$row['name']}</option>";
                     }
                 } else {
-                    echo "<option value='' disabled>No customers registered today</option>";
+                    echo "<option value='' disabled>No customers attended today</option>";
                 }
                 ?>
             </select>
