@@ -12,35 +12,6 @@ date_default_timezone_set('Asia/Kuala_Lumpur'); // Set timezone if needed
 
 $message = ''; // Initialize message
 
-// Get the latest booking date from the customer table
-$latest_customer_date_query = "SELECT MAX(booking_date) AS latest_date FROM customer";
-$latest_customer_date_result = $conn->query($latest_customer_date_query);
-$latest_customer_date_row = $latest_customer_date_result->fetch_assoc();
-$latest_customer_date = $latest_customer_date_row['latest_date'];
-
-// Get the latest date in the activity_record table
-$latest_activity_date_query = "SELECT MAX(date) AS latest_date FROM activity_record";
-$latest_activity_date_result = $conn->query($latest_activity_date_query);
-$latest_activity_date_row = $latest_activity_date_result->fetch_assoc();
-$latest_activity_date = $latest_activity_date_row['latest_date'];
-
-// Insert new records if the customer table has a more recent booking date than the activity_record table
-if ($latest_customer_date > $latest_activity_date) {
-    $insert_update_query = "
-        INSERT INTO activity_record (id, date, total_activity)
-        SELECT NULL, booking_date, COUNT(*) AS total_activity
-        FROM customer
-        GROUP BY booking_date
-        HAVING booking_date NOT IN (SELECT date FROM activity_record)
-    ";
-
-    if ($conn->query($insert_update_query) === TRUE) {
-        $message = "Activity records updated successfully!";
-    } else {
-        $message = "Error updating activity records: " . $conn->error;
-    }
-}
-
 // Retrieve all records from the activity_record table to display total participants per date
 $query = "SELECT id, date, total_activity FROM activity_record ORDER BY date DESC";
 $result = $conn->query($query);

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $customer_id = $_POST['customer_id'];
     $description = $_POST['description'];
     $location = $_POST['location'];
-    $date = date('Y-m-d'); // Store as Y-m-d
+    $date = date('Y-m-d'); // Store as Y-m-d format in the database
 
     // Fetch the customer's name based on customer_id
     $customer_query = "SELECT name FROM customer WHERE id = '$customer_id'";
@@ -31,12 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   VALUES ('$customer_id', '$customer_name', '$description', '$location', '$date')";
 
         if ($conn->query($query) === TRUE) {
+            // Format the date as d/m/Y for display
+            $formatted_date = date('d/m/Y', strtotime($date));
+            
             // Set success message and prepare report details for printing
             $success_message = 'Accident report submitted successfully.';
             $report_details = "
                 <div class='print-content'>
                     <h2>Accident Report</h2>
-                    <p><strong>Date:</strong> $date</p>
+                    <p><strong>Date:</strong> $formatted_date</p>
                     <p><strong>Customer:</strong> $customer_name</p>
                     <p><strong>Location:</strong> $location</p>
                     <p><strong>Description:</strong> $description</p>
