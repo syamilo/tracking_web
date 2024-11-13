@@ -34,11 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Set success message and prepare report details for printing
             $success_message = 'Accident report submitted successfully.';
             $report_details = "
-                <h3>Accident Report</h3>
-                <p><strong>Date:</strong> $date</p>
-                <p><strong>Customer:</strong> $customer_name</p>
-                <p><strong>Location:</strong> $location</p>
-                <p><strong>Description:</strong> $description</p>
+                <div class='print-content'>
+                    <h2>Accident Report</h2>
+                    <p><strong>Date:</strong> $date</p>
+                    <p><strong>Customer:</strong> $customer_name</p>
+                    <p><strong>Location:</strong> $location</p>
+                    <p><strong>Description:</strong> $description</p>
+                </div>
             ";
         } else {
             // Set error message
@@ -58,15 +60,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Accident Report</title>
     <link rel="stylesheet" href="report.css">
+    <style>
+        /* Style for the printed report */
+        @media print {
+            body * { visibility: hidden; }
+            .print-content, .print-content * { visibility: visible; }
+            .print-content { position: absolute; top: 0; left: 0; right: 0; padding: 20px; }
+            .print-content h2 {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .print-content p {
+                font-size: 16px;
+                margin: 10px 0;
+                line-height: 1.5;
+            }
+            .print-content strong {
+                font-weight: bold;
+            }
+        }
+
+        /* General styling */
+        .form-container { max-width: 600px; margin: auto; padding: 20px; }
+        .success-message { color: green; font-weight: bold; margin-bottom: 20px; text-align: center; }
+    </style>
     <script>
         function printReport() {
-            const printContents = document.getElementById('report-details').innerHTML;
-            const originalContents = document.body.innerHTML;
-
-            document.body.innerHTML = printContents;
             window.print();
-            document.body.innerHTML = originalContents;
-            location.reload(); // Reload to restore the page
         }
     </script>
 </head>
