@@ -196,12 +196,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($from_date) && !empty($to_dat
                     <tr>
                         <th>Date</th>
                         <th>Total Activity</th>
+                        <th>Activity Details</th>
                     </tr>
                     <?php while ($row = $records->fetch_assoc()): ?>
                         <tr>
                             <!-- Format the date as d/m/y -->
                             <td><?= date('d/m/Y', strtotime($row['date'])) ?></td>
                             <td><?= htmlspecialchars($row['total_activity']) ?></td>
+                            <td>
+                                <?php
+                                // Fetch activity details for each date
+                                $activity_date = $row['date'];
+                                $detail_query = "
+                                    SELECT activity, COUNT(*) AS total_participants
+                                    FROM customer
+                                    WHERE booking_date = '$activity_date'
+                                    GROUP BY activity
+                                ";
+                                $details_result = $conn->query($detail_query);
+
+                                // Display activity details as a list
+                                if ($details_result && $details_result->num_rows > 0) {
+                                    echo "<ul>";
+                                    while ($detail = $details_result->fetch_assoc()) {
+                                        echo "<li>" . htmlspecialchars(ucwords($detail['activity'])) . ": " . htmlspecialchars($detail['total_participants']) . "</li>";
+                                    }
+                                    echo "</ul>";
+                                } else {
+                                    echo "No details available";
+                                }
+                                ?>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php elseif ($record_type == 'customer'): ?>
